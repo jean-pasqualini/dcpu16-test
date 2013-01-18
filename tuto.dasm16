@@ -1,0 +1,59 @@
+; Ceci est mon premier programme
+; Fonctionnemtn des registre
+; Liste des registres speciaux
+; PC = instruction à executer
+;
+; Function (Registre, Valeur ( ou registre.getValeur())
+; SET : Registre = valuer
+; ADD : Registre += valeur
+; SUB : Registre -= valeur
+; MUL : Registre *= valeur
+; DIV : Registre /= valeur (division sans reste)
+; MOD : Registre /= valeur (donne les resite de la division uniquement)
+;
+; Adresses memoire
+; une adresse memoire est entre crochet compare a une simple valeur exemple
+; SET [0x8001], 5  (ici la premiere valeur est uen adresse memoire car entre crochet)
+;
+; Un registre peut stocker une adresse memoire
+; Si on stocke dans le registre A l'adrese 0x8001
+; SET A, 0x8001
+; pour l'instant ce n'est qu'une valeur
+; mais on peut l'utiliser comme adresse memoire avec les fameux crochet
+; SET [A], valeur
+; On stocke donc valeur dans l'adresse mémoire qui est stocké dans le registre A
+; Selon qu'un registre est 8, 16 (dcpu16 est en 16 bits d'ou son nom), 32 bits il peut contenir des valeur plus ou moins grande
+; Si on part du constat en hexa de 0x000 à 0xFFFF sont les limite du 16 bit
+;
+; De meme un programme dasm ne peut exceder la taille d'un 16 bits
+; On ne peut avoir donc qu'un programme de maximum 65536 instruction
+; On ne peut également avoir que 65536 valeurs stocké en mémoire ram
+;
+; On se rend vite compte qu'il faut optimiser son programe car on est limité
+; Et pour faire peut de chose il faut beaucoup de ligne en assembleur
+; L'optimisation est donc la regle d'or
+; Tutoriels dispo :
+; http://0x10c.fr/index.php?threads/tutos-apprendre-le-dasm-16-une-s%C3%A9rie-de-tutoriels-videos.265/
+; http://0x10c.fr/index.php?threads/tuto-la-programmation-en-dasm-pour-les-nuls.692/
+;
+; Ide utiliser
+;  - DCPU-16 Studio
+;  - www.dcpu-ide.com (online ide)
+;  - puissant mais trop complexe pour l'instant => https://github.com/kierenj/0x10c-DevKit/downloads
+
+
+SET A, 2
+SET B, 5
+SET A, B
+
+;********  CALCUL ********
+; Addition
+
+SET A, 3
+DIV A, 2
+
+
+
+
+:end
+SET PC, END
