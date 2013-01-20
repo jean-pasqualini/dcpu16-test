@@ -10,6 +10,8 @@
   </properties>
   <references />
   <files>
-    <file path="tuto.dasm16" />
+    <file path="tuto.dasm16">
+      <property name="providerFileTypeName">Example BASIC</property>
+    </file>
   </files>
 </project>

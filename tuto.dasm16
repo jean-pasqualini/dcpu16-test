@@ -1,7 +1,11 @@
 ; Ceci est mon premier programme
+;
+; Il faut apprendre l'hexadecimale
+;
 ; Fonctionnemtn des registre
+;
 ; Liste des registres speciaux
-; PC = instruction à executer
+; PC(Program counter) = adresse de la prochaine instruction à executer
 ;
 ; Function (Registre, Valeur ( ou registre.getValeur())
 ; SET : Registre = valuer
@@ -14,6 +18,56 @@
 ; Adresses memoire
 ; une adresse memoire est entre crochet compare a une simple valeur exemple
 ; SET [0x8001], 5  (ici la premiere valeur est uen adresse memoire car entre crochet)
+;
+; Conditions
+;
+; IFE A, B : A == B
+; IFN A, B : A != B
+; IFG A, B : A > B
+; IFL A, B : A < B
+; IFB A, B : A != 0 && B != 0
+;
+; Les labels
+;
+; :hello  // le compil associé le lable à l'adresse de l'instruction
+; SET PC, hello // le compilateur met le PC à l'adresse d'insctuion du label
+;
+; Exemple de boucle
+; SET A, 0  // a = 0
+; :boucle // le label boucle
+; ADD A,1  // a += 1
+; IFN A, 10 // Si A != 10 on execute la ligne d'en dessous
+;    SET PC, boucle // On demande au pc counter de reexecuter le programme a partie du label boule (on boucle donc le programme)
+;
+; Explication du code final d'un programme
+; :end
+; SET PC, end
+; On boucle le programme car sinon le pc counter augmente automatiquement
+; De 1 et tente d'executer une instruction situé à une adresse qui ne lui appartient pas
+;
+; Adresse memoire ou mot (world)
+;
+; [0x adresse ]  16 bits en hexa
+; [0x0002] peut etre ecourte en [0x2]
+;
+; LES VARIABLES
+; =========================
+;
+; Pour reserver une adresse memoire
+; on utilise l'instruction assembleur dat
+; DAT 2, 5, 'a'
+; DAT "this is a test"
+; DAT est une instruction qui utilise le code ascii
+; afin de stocker des lettre dans la memoire
+; il peut stocker une phrase en stockant chaque lettre dans un mot
+; encore mieux on peut stocker l'adresse ou sont enregistrer les info
+; comme ceci :variable DAT
+;
+; :variable dat 2
+; SET [variable], 3
+; SET A, [variable]
+; SET B, variable
+; SET [B], 42
 ;
 ; Un registre peut stocker une adresse memoire
 ; Si on stocke dans le registre A l'adrese 0x8001
@@ -29,6 +83,23 @@
 ; On ne peut avoir donc qu'un programme de maximum 65536 instruction
 ; On ne peut également avoir que 65536 valeurs stocké en mémoire ram
 ;
+; L'ecran affiche uniquement du texte (32*12)
+; 32*16 pour DCPU-studio
+; le texte est contenu dans la zone memoire
+; allant de 0x8000 à 0x8200
+; 32*16 = 512 * 4 = 2000
+; peut etre 4 bloc par lettre (?)
+; Chaque mot est compose comme ceci
+; FFFFBBBBZCCC
+; (F = Foreground, B = Background, Z = clignote ou pas, C = caractere en ascii)
+; Pour voir les correspondance couleur hexa
+; 0x10cwiki.com/wiki/Video_RAM.
+; SET [0x8000], F161
+; F couleur texte blanche
+; 1 couleur arriere plan bleu
+; 61 valeur ASCII de "a"
+; BUFFER DE L'ECRAN
+;
 ; On se rend vite compte qu'il faut optimiser son programe car on est limité
 ; Et pour faire peut de chose il faut beaucoup de ligne en assembleur
 ; L'optimisation est donc la regle d'or
@@ -42,18 +113,38 @@
 ;  - puissant mais trop complexe pour l'instant => https://github.com/kierenj/0x10c-DevKit/downloads
 
 
-SET A, 2
-SET B, 5
-SET A, B
-
-;********  CALCUL ********
-; Addition
-
-SET A, 3
-DIV A, 2
+:bleu DAT 0xF100
 
 
+:texte1 DAT "Hello World!", 0
+SET C, texte1
+SET PC, print
+
+:texte2 DAT "C moi le maitre", 0
+SET C, texte2
+SET PC, print
 
 
-:end
-SET PC, END
+:print
+
+SET A, 0x8000
+SET B, C
+
+:boucle
+
+ADD [B], 0xF100 ; on ajoute la couleur
+
+SET [A], [B]; on affiche le caractere
+
+ADD A, 1; on se deplace sur l'ecran
+
+ADD B, 1; on passe au caractere suivant
+
+IFN [B], 0; tant qu'on n'est pas a la fin du texte
+    SET PC, boucle ; on boucle
+
+
+
+
+
+:fin SET PC, fin
