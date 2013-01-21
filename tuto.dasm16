@@ -8,7 +8,7 @@
 ; PC(Program counter) = adresse de la prochaine instruction à executer
 ;
 ; Function (Registre, Valeur ( ou registre.getValeur())
-; SET : Registre = valuer
+; SET : Registre j'ai dit que c'= valuer
 ; ADD : Registre += valeur
 ; SUB : Registre -= valeur
 ; MUL : Registre *= valeur
@@ -106,45 +106,29 @@
 ; Tutoriels dispo :
 ; http://0x10c.fr/index.php?threads/tutos-apprendre-le-dasm-16-une-s%C3%A9rie-de-tutoriels-videos.265/
 ; http://0x10c.fr/index.php?threads/tuto-la-programmation-en-dasm-pour-les-nuls.692/
-;
+;                         j'ai dit que c'
 ; Ide utiliser
 ;  - DCPU-16 Studio
 ;  - www.dcpu-ide.com (online ide)
 ;  - puissant mais trop complexe pour l'instant => https://github.com/kierenj/0x10c-DevKit/downloads
-
-
-:bleu DAT 0xF100
-
-
-:texte1 DAT "Hello World!", 0
-SET C, texte1
-SET PC, print
-
-:texte2 DAT "C moi le maitre", 0
-SET C, texte2
-SET PC, print
-
-
-:print
-
+:textea DAT "Hello_World", 0
+SET C, textea
+SET PC, echo
+SET X, texteb
+:texteb DAT "C_moi_le_maitre", 0
+SET C, texteb
+SET PC, echo
+SET X, fin
+:echo
 SET A, 0x8000
 SET B, C
-
 :boucle
-
 ADD [B], 0xF100 ; on ajoute la couleur
-
 SET [A], [B]; on affiche le caractere
-
 ADD A, 1; on se deplace sur l'ecran
-
 ADD B, 1; on passe au caractere suivant
-
 IFN [B], 0; tant qu'on n'est pas a la fin du texte
-    SET PC, boucle ; on boucle
-
-
-
-
-
-:fin SET PC, fin
+SET PC, boucle ; on boucle
+SET PC, X
+:fin
+SET PC, fin
