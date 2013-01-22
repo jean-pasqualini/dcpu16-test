@@ -111,16 +111,42 @@
 ;  - DCPU-16 Studio
 ;  - www.dcpu-ide.com (online ide)
 ;  - puissant mais trop complexe pour l'instant => https://github.com/kierenj/0x10c-DevKit/downloads
-SET C, textea
-SET PC, echo
-SET X, affiche_texte_b
-SET Y, 1
+;
+; Les functions by me
+;
+; Adresse memoire de fortune
+; X = Adresse of Structure appel
+;
+; Structure appel :
+; =================
+;           => Adresse Liste parametre
+;           => Nombre parametre
+;           => Adresse instruction return
+;           => Si retour
+;           => Adresse Adresse retour
+;
+; Structure variable
+; ==================
+;           => emplacement memoire
+;           => taille variable
+;           => type variable
 
-:affiche_texte_b
-SET C, texteb
-SET PC, echo
-SET X, fin
-SET Y, 16
+;SET PC, echo
+;SET X, affiche_texte_b
+;SET C, X
+;SET Y, 1
+
+SET PC, check_free_mem
+SET C, fin
+
+:check_free_mem
+SET A, 0x0000
+:boucle_free_mem
+ADD A, 1
+IFN [A], 0
+    SET PC, boucle_free_mem
+SET B, A
+SET PC, C
 
 :echo
 SET A, 0X8000
