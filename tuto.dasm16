@@ -111,17 +111,22 @@
 ;  - DCPU-16 Studio
 ;  - www.dcpu-ide.com (online ide)
 ;  - puissant mais trop complexe pour l'instant => https://github.com/kierenj/0x10c-DevKit/downloads
-:textea DAT "Hello_World", 0
 SET C, textea
 SET PC, echo
-SET X, texteb
-:texteb DAT "C_moi_le_maitre", 0
+SET X, affiche_texte_b
+SET Y, 1
+
+:affiche_texte_b
 SET C, texteb
 SET PC, echo
 SET X, fin
+SET Y, 16
+
 :echo
-SET A, 0x8000
+SET A, 0X8000
+ADD A, Y ; position du curseur
 SET B, C
+
 :boucle
 ADD [B], 0xF100 ; on ajoute la couleur
 SET [A], [B]; on affiche le caractere
@@ -132,3 +137,7 @@ SET PC, boucle ; on boucle
 SET PC, X
 :fin
 SET PC, fin
+
+:textea DAT "mwa", 0
+:texteb DAT "lol", 0
+:screen_buffer_start DAT 0X8000
