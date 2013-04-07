@@ -51,7 +51,7 @@ class commandLine implements IService {
 		
 		$this->_SERVER = $_SERVER;
 		
-		for($i=1; $i<count($this->_SERVER["argv"]); $i++)
+		for($i=1; $i < (count($this->_SERVER["argv"]) - 1); $i++)
 		{
 			list($name,$value) = explode(":", $this->_SERVER["argv"][$i]);
 			
@@ -133,7 +133,9 @@ class commandLine implements IService {
 		
 		foreach($this->getArguments() as $index => $argument)
 		{
-			switch($this->getListenParameters()[$index])
+            $listenParameters = $this->getListenParameters();
+            
+			switch($listenParameters[$index])
 			{
 				case self::STRING_PARAMETERS:
 					if(!is_string($argument))
