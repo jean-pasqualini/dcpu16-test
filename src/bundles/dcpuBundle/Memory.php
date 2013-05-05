@@ -1,19 +1,17 @@
 <?php
 namespace dcpuBundle;
 
-	class Memory {
+	class Memory extends Location {
 		const size = 65536;
-		
-		private $memoryWords = array();
-		
+
 		public function getMemoryWordFromAdress($pointer)
 		{	
-			if(empty($this->memoryWords[hexdec($pointer)])) 
+			if(empty(Location::$storageLocations[hexdec($pointer)])) 
 			{
-				$this->memoryWords[hexdec($pointer)] = new MemoryWord($pointer);
+				Location::$storageLocations[hexdec($pointer)] = new MemoryWord();
 			}
 			
-			return $this->memoryWords[hexdec($pointer)];
+			return Location::$storageLocations[hexdec($pointer)];
 		}
 	}
 	

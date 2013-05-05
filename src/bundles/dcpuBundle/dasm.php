@@ -10,6 +10,8 @@ Class dasm
 		const POINTER_PARAMETER = 3;
 	
 		private $datas = array();
+        private $functions = array();
+        
 		private $dcpu;
 		
 		public function __construct($dcpu)
@@ -21,7 +23,7 @@ Class dasm
 		{
 			$storageLocation->setValue($value);
 			
-			echo "SET ".$storageLocation->getEmplacement().", ".$value.self::BREAKLINE;
+			echo "SET ".Location::getStaticLocationFromStorageLocation($storageLocation).", ".$value.self::BREAKLINE;
 		}
 		
 		public function ADD(StorageLocation $storageLocation)
@@ -32,10 +34,18 @@ Class dasm
 		{
 		}
 		
-		public function createFunction($functionname, $parameters = array())
+        /**
+         *  
+         */
+		public function createFunction($functionname, $parameters = array(), $handle)
 		{
-			$this->createLabel($functionname);
+            $this->functions[$functionname] = $handle;
 		}
+        
+        public function __call($functionName, $param)
+        {
+            $this->goToLabel("function".$functionName);
+        }
 		
 		public function addData($label, $values = array())
 		{
@@ -46,11 +56,22 @@ Class dasm
 		{
 			echo ":".$labelname.self::BREAKLINE;
 		}
+        
+        public function goToLabel($labelname)
+        {
+            echo $this->SET($this->dcpu->getRegister()->getRegisterLocation("PC"), $labelname);
+        }
 		
 		public function __destruct()
 		{
 				// Build datas
 				echo implode(self::BREAKLINE, $this->datas).self::BREAKLINE;
+                
+                foreach($this->functions as $functionname => $handle)
+                {
+            	    $this->createLabel("function".$functionname);
+                    $handle();
+                }
 		}
 	}
 

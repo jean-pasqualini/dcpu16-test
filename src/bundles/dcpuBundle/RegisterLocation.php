@@ -1,7 +1,7 @@
 <?php
 namespace dcpuBundle;
 
-	Class RegisterLocation {
+	Class RegisterLocation extends StorageLocation {
 		
 	}
 	

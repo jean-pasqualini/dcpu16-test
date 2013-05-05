@@ -12,21 +12,19 @@
 		// Charge toutes les librairies
 		array_map(function($file) { include ($file); }, glob(__DIR__."/../../../lib/*.php"));
 	
+    
 		// Enregistre l'autoloader
-		autoLoader::register();
-		autoLoader::loadCache();
-			
-		autoLoader::setAllBaseDirectory(array(
-			__CORE_DIRECTORY__,
-			__DIR__."/../app/",
-			__CORE_DIRECTORY__."/src/bundles/",
-            __DIR__."/../src/bundles/",
-		));
-		
-		
-		autoLoader::setBaseDirectory(array(
-			
-		));
+		$autoloader = autoLoader::register();
+
+        $autoloader->append($finder = new Finder());
+
+        $finder
+        ->in(__CORE_DIRECTORY__)
+        ->in(__DIR__."/../app/")
+        ->in(__DIR__."/../src/bundles/")
+        ->files()
+        ;
+							
 		
         $app = EmptyClassDynamic::_fromClass(new core("dev", true));
 		
@@ -53,8 +51,6 @@
 		echo $app->getServiceContainer()->getService("test")->quisuisje();
 		*/	
 		$app->run();
-        
-        autoLoader::saveCache();
 		
 	}
 	catch (exception $e){

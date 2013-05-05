@@ -62,7 +62,13 @@ class test implements IService {
 		
 		$program->createFunction("echo", array(
 			"chaine" => dasm::STRING_PARAMETER
-		));
+		), function() use ($program, $dcpu)
+        {
+            $program->SET($dcpu->getMemory()->getMemoryWordFromAdress("0x0009"), 10);
+        });
+        
+        $program->echo("mwahaha");
+        $program->echo("mwahaha");
 		
 		$program->SET($dcpu->getMemory()->getMemoryWordFromAdress("0x0002"), 3);
 	}
